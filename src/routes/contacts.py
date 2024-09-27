@@ -24,6 +24,20 @@ async def read_contacts(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function returns a paginated list of contacts for the current user.
+
+    :param skip: The number of contacts to skip.
+    :type skip: int
+    :param limit: The maximum number of contacts to return.
+    :type limit: int
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: A list of contacts.
+    :rtype: List[ContactResponse]
+    """
     contacts = await repository_contacts.get_contacts(skip, limit, current_user, db)
     return contacts
 
@@ -36,6 +50,22 @@ async def search_contacts(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function searches for contacts by first name, last name, or email for the current user.
+
+    :param first_name: First name to search.
+    :type first_name: str | None
+    :param last_name: Last name to search.
+    :type last_name: str | None
+    :param email: Email to search.
+    :type email: str | None
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: A list of contacts matching the search criteria.
+    :rtype: List[ContactResponse]
+    """
     contacts = await repository_contacts.search_contacts(db, first_name, last_name, email,  current_user)
     return contacts
 
@@ -46,6 +76,18 @@ async def get_upcoming_birthdays(
     db: Session = Depends(get_db),
     current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function returns contacts with upcoming birthdays within the specified number of days.
+
+    :param days: Number of days to look ahead for upcoming birthdays (default is 7 days).
+    :type days: int
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: A list of contacts with upcoming birthdays.
+    :rtype: List[ContactResponse]
+    """
     contacts = repository_contacts.get_upcoming_birthdays(db,  current_user, days)
     return contacts
 
@@ -60,6 +102,18 @@ async def read_contact(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function returns a contact by ID for the current user.
+
+    :param contact_id: The contact ID to retrieve.
+    :type contact_id: int
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: The contact with the provided contact ID or raises HTTP 404 if not found.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.get_contact(contact_id,  current_user, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
@@ -76,6 +130,18 @@ async def create_contact(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function creates a new contact for the current user.
+
+    :param body: The contact's creation data.
+    :type body: ContactCreate
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: The newly created contact.
+    :rtype: ContactResponse
+    """
     return await repository_contacts.create_contact(body,  current_user, db)
 
 
@@ -86,6 +152,20 @@ async def update_contact(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function updates an existing contact by ID for the current user.
+
+    :param body: The updated contact data.
+    :type body: ContactUpdate
+    :param contact_id: The contact ID to update.
+    :type contact_id: int
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: The updated contact or raises HTTP 404 if not found.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.update_contact(contact_id, body,  current_user, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")
@@ -98,6 +178,18 @@ async def remove_contact(
         db: Session = Depends(get_db),
         current_user: User = Depends(auth_service.get_current_user)
 ):
+    """
+    The function removes a contact by ID for the current user.
+
+    :param contact_id: The contact ID to remove.
+    :type contact_id: int
+    :param db: A database session.
+    :type db: Session
+    :param current_user: The current authenticated user.
+    :type current_user: User
+    :return: The removed contact or raises HTTP 404 if not found.
+    :rtype: ContactResponse
+    """
     contact = await repository_contacts.remove_contact(contact_id,  current_user, db)
     if contact is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contact not found")

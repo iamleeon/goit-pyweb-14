@@ -1,11 +1,8 @@
-.. Rest API documentation master file, created by
-sphinx-quickstart on Thu Sep 26 21:12:21 2024.
-
 Welcome to Rest API's documentation!
 ====================================
 
 .. toctree::
-  :maxdepth: 2
+  :maxdepth: 3
   :caption: Contents:
 
 

@@ -30,13 +30,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.on_event("startup")
 async def startup():
+    """
+    Initialize Redis and FastAPILimiter during the startup event.
+
+    :rtype: None
+    """
     r = await redis.Redis(host=settings.redis_host, port=settings.redis_port, db=0, encoding="utf-8", decode_responses=True)
     await FastAPILimiter.init(r)
 
 
 @app.get("/health", tags=["Health check"])
 def health_check():
+    """
+    Health check endpoint to verify if the API is up and running.
+
+    :return: A JSON response indicating the API status.
+    :rtype: dict
+    """
     return {"status": "healthy"}
 
