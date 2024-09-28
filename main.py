@@ -52,3 +52,13 @@ def health_check():
     """
     return {"status": "healthy"}
 
+
+@app.get("/")
+async def read_root():
+    """
+    Root endpoint for the FastAPI application.
+
+    :return: A JSON response indicating the API status.
+    :rtype: dict
+    """
+    return {"message": "Welcome to the FastAPI application!"}

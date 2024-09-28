@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     mail_from: str
     mail_port: int
     mail_server: str
-    redis_host: str = 'localhost'
-    redis_port: int = 6379
+    redis_host: str
+    redis_port: int
 
     postgres_db: str
     postgres_user: str
